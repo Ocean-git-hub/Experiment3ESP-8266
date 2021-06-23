@@ -6,7 +6,6 @@
 #define WIFI_PASSWORD ""
 
 #define ARDUINO_SERIAL_SPEED 9600
-#define PC_SERIAL_SPEED 9600
 
 #define ARDUINO_SERIAL_RX_PIN 13
 #define ARDUINO_SERIAL_TX_PIN 14
@@ -20,9 +19,6 @@ void setup() {
 
     configTzTime("JST-9", "ntp.nict.jp");
 
-    Serial.begin(PC_SERIAL_SPEED);
-    Serial.println("Start ESP-8266");
-
     arduinoSerial.begin(ARDUINO_SERIAL_SPEED);
 }
 
@@ -30,11 +26,8 @@ void loop() {
     if (arduinoSerial.available() > 0) {
         if (arduinoSerial.read() == 1) {
             time_t t = time(nullptr);
-            struct tm *time = localtime(&t);
-            char currentTime[12] = {};
-            sprintf(currentTime, "%02d/%02d %02d:%02d",
-                    time->tm_mon, time->tm_mday, time->tm_hour, time->tm_min);
-            arduinoSerial.print(currentTime);
+            struct tm *tm = localtime(&t);
+            arduinoSerial.write((char *) tm, sizeof(struct tm));
         } else {
             arduinoSerial.print("Bad request");
         }
