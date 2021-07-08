@@ -32,4 +32,7 @@ add_custom_target(
 
 add_executable(Z_DUMMY_TARGET ${SRC_LIST})
 
-include_directories(".pio/libdeps/esp8285/ArduinoJson/src")
+include_directories(
+        ".pio/libdeps/esp8285/ArduinoJson/src"
+        ".pio/libdeps/esp8285/TimeAlarms"
+)
